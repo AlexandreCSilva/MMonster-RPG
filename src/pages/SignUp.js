@@ -6,6 +6,9 @@ import { Row, Title, Label, StyledContainer } from '../layouts/Auth';
 import Link from '../layouts/Link';
 import { AuthContext } from '../context/Auth';
 import styled from 'styled-components';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import { toast } from 'react-toastify';
 
 export function SignUp() {
   const [email, setEmail] = useState('');
@@ -17,14 +20,24 @@ export function SignUp() {
   
   async function submit(event) {
     event.preventDefault();
-
-    try {
-      console.log(email, name, password);
-      alert('Resgistro realizado com sucesso!');
-      navigate('/sign-in');
-    } catch (err) {
-      alert('Não foi possível fazer o registro!');
-    }
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setUserData(user);
+        navigate('/game');
+      })
+      .catch((error) => {
+        if (error.code === 'auth/invalid-email') {
+          toast('Email inválido');
+        } else if (error.code === 'auth/weak-password') {
+          toast('Senha fraca, use 6 ou mais caracteres');
+        } else if (error.code === 'auth/email-already-in-use') {
+          toast('O email ja está em uso');
+        } else {
+          console.log(error);
+          toast('Não foi possivel realizar o seu registro, tente novamente');
+        }
+      });
   } 
 
   return (
@@ -38,7 +51,6 @@ export function SignUp() {
           <form onSubmit={submit}>
             <Input label='E-mail' type='text' fullWidth value={email} onChange={e => setEmail(e.target.value)} />
             <Input label='Senha' type='password' fullWidth value={password} onChange={e => setPassword(e.target.value)} />
-            <Input label='Nome da conta' type='name' fullWidth value={name} onChange={e => setName(e.target.value)} />
             <Button type='submit' color='primary' fullWidth disabled={loadingSignUp}>Entrar</Button>
           </form>
         </Row>

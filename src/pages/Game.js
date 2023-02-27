@@ -23,7 +23,7 @@ export function Game() {
 
   return (
     <div className='Game'>
-      
+      o jogo aqui
     </div>
   );
 }

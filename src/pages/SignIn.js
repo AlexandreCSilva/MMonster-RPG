@@ -6,6 +6,9 @@ import { Row, Title, Label, StyledContainer } from '../layouts/Auth';
 import Link from '../layouts/Link';
 import { AuthContext } from '../context/Auth';
 import styled from 'styled-components';
+import { auth } from '../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 export function SignIn() {
   const [email, setEmail] = useState('');
@@ -17,13 +20,24 @@ export function SignIn() {
   async function submit(event) {
     event.preventDefault();
 
-    try {
-      console.log(email, password);
-      alert('Login realizado com sucesso!');
-      navigate('/dashboard');
-    } catch (err) {
-      alert('Não foi possível fazer o login!');
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setUserData(user);
+        navigate('/game');
+      })
+      .catch((error) => {
+        if (error.code === 'auth/invalid-email') {
+          toast('Email inválido');
+        } else if (error.code === 'auth/user-not-found') {
+          toast('Nenhum usuario possui esse email');
+        } else if (error.code === 'auth/wrong-password') {
+          toast('Senha inválida');
+        } else {
+          console.log(error);
+          toast('Não foi possivel realizar o seu login, tente novamente');
+        }
+      });
   } 
 
   return (

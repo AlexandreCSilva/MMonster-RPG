@@ -9,17 +9,29 @@ import { HomePage } from './pages/HomePage';
 import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
 import { AuthProvider } from './context/Auth';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useToken from './hooks/useToken';
 
 function App() {
   return (
     <>
       <Reset />
       <AuthProvider>
+        
         <Router>
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/sign-in' element={<SignIn />} />
             <Route path='/sign-up' element={<SignUp />} />
+            <Route
+              path="/game"
+              element={
+                <ProtectedRouteGuard>
+                  <Game />
+                </ProtectedRouteGuard>
+              }
+            />
             <Route index path='*' element={<Navigate to='/' />} />
           </Routes>
         </Router>
@@ -28,6 +40,18 @@ function App() {
             <Game />
           </Canvas>
         </CanvasProvider> */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </AuthProvider>
     </>
   );
@@ -363,5 +387,17 @@ function App() {
     }
   }); */
 }
+
+function ProtectedRouteGuard({ children }) {
+  const token = useToken();
+
+  if (!token) {
+    return <Navigate to="/sign-in" />;
+  }
+
+  return <>
+    {children}
+  </>;
+};
 
 export default App;
