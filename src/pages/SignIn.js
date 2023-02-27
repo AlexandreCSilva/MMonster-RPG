@@ -7,14 +7,14 @@ import Link from '../layouts/Link';
 import { AuthContext } from '../context/Auth';
 import styled from 'styled-components';
 import { auth } from '../firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { toast } from 'react-toastify';
+import { FcGoogle } from 'react-icons/fc';
 
 export function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUserData } = useContext(AuthContext);
-  const loadingSignIn = false;
   const navigate = useNavigate();
   
   async function submit(event) {
@@ -40,6 +40,21 @@ export function SignIn() {
       });
   } 
 
+  async function signInWithGoogle(event) {
+    event.preventDefault();
+    const provider = new GoogleAuthProvider();
+
+    await signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        setUserData(user);
+        navigate('/game');
+      }).catch((error) => {
+        console.log(error);
+        toast('Não foi possivel realizar o seu login, tente novamente');
+      });
+  }
+
   return (
     <Wrapper>
       <StyledContainer>
@@ -51,7 +66,8 @@ export function SignIn() {
           <form onSubmit={submit}>
             <Input label='E-mail' type='text' fullWidth value={email} onChange={e => setEmail(e.target.value)} />
             <Input label='Senha' type='password' fullWidth value={password} onChange={e => setPassword(e.target.value)} />
-            <Button type='submit' color='primary' fullWidth disabled={loadingSignIn}>Entrar</Button>
+            <Button type='submit' color='primary' fullWidth>Entrar</Button>
+            <Button type='button' color='primary' fullWidth onClick={signInWithGoogle}><FcGoogle size={40}/></Button>
           </form>
         </Row>
         <Row>

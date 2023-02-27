@@ -1,17 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
 import Reset from './assets/Reset';
-import { Canvas } from './components/Canvas';
-import { Game } from './pages/Game';
-import { CanvasProvider } from './context/Canvas';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { HomePage } from './pages/HomePage';
-import { SignIn } from './pages/SignIn';
-import { SignUp } from './pages/SignUp';
 import { AuthProvider } from './context/Auth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useToken from './hooks/useToken';
+import { HomePage } from './pages/HomePage';
+import { SignIn } from './pages/SignIn';
+import { SignUp } from './pages/SignUp';
+import { Game } from './pages/Game';
 
 function App() {
   return (
@@ -35,11 +32,6 @@ function App() {
             <Route index path='*' element={<Navigate to='/' />} />
           </Routes>
         </Router>
-        {/*  <CanvasProvider>
-          <Canvas>
-            <Game />
-          </Canvas>
-        </CanvasProvider> */}
         <ToastContainer
           position="top-right"
           autoClose={5000}
