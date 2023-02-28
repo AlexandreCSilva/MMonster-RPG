@@ -1,7 +1,6 @@
-class Map {
-  constructor(config) { 
-    this.element = config.element;
-    this.canvas = this.element.querySelector(".game-canvas");
+class LoadMap {
+  constructor(canvas) { 
+    this.canvas = canvas;
     this.context = this.canvas.getContext("2d");
     this.map = null;
   };

@@ -7,11 +7,23 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer);
 
-io.on("connect", (socket) => {
-  console.log("User connected", socket.id);
-});
+async function main() {
+  const map = {
+    DemoRoom: {
+      lowerSrc: "./images/maps/DemoLower.png",
+      upperSrc: "./images/maps/DemoUpper.png",
+    }, 
+  };
 
+  io.on("connect", (socket) => {
+    console.log("User connected", socket.id);
 
-app.use(express.static("public"));
+    socket.emit("map", map);
+  });
 
-httpServer.listen(5000, () => console.log("server running"));
+  app.use(express.static("client"));
+
+  httpServer.listen(5000, () => console.log("server running"));
+};
+
+main();
