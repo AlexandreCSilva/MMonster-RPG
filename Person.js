@@ -12,10 +12,35 @@ class Person extends GameObject {
   }
 
   update(state) {
-    this.updatePosition();
-    this.updateSprite(state);
-    if (this.isPlayer && this.movementProgressRemaining === 0 && state.arrow) {
-      this.direction = state.arrow;
+    if (this.movementProgressRemaining > 0) {
+      this.updatePosition();
+    } else {
+
+      // O player pode se mover e apertou um botão
+      if (this.isPlayer && state.arrow) {
+        this.startBehavior(state, {
+          type: "walk",
+          direction: state.arrow,
+        });
+      }
+    }
+   
+    this.updateSprite();
+  }
+
+  startBehavior(state, behavior) {
+    this.direction = behavior.direction;
+    
+    // Mostra como o personagem deve se comportar
+    if (behavior.type === "walk") {
+      
+      // Para caso ja tiver um objeto no lugar
+      if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+        return;
+      }
+
+      // Move o player
+      state.map.moveWall(this.x, this.y, this.direction);
       this.movementProgressRemaining = 16;
     }
   }
@@ -28,13 +53,12 @@ class Person extends GameObject {
     }
   }
 
-  updateSprite(state) { 
-    if (this.isPlayer && this.movementProgressRemaining === 0 && !state.arrow) {
-      this.sprite.setAnimation("idle-"+this.direction);
-      return;
-    }
+  updateSprite() {
     if (this.movementProgressRemaining > 0) {
       this.sprite.setAnimation("walk-"+this.direction);
+      return;
     }
+
+    this.sprite.setAnimation("idle-"+this.direction);
   }
 };

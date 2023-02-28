@@ -1,5 +1,5 @@
 class Map {
-  constructor(config) {
+  constructor(config) { 
     this.element = config.element;
     this.canvas = this.element.querySelector(".game-canvas");
     this.context = this.canvas.getContext("2d");
@@ -8,16 +8,28 @@ class Map {
 
   startGamelLoop() {
     const step = () => {
-      
+      // Limpa o canvas
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.map.drawLowerImage(this.context);
+
+      // Cria a camera focada no jogador
+      const cameraPlayer = this.map.gameObjects.player;
+      
+      // Atualiza a posição dos objetos
       Object.values(this.map.gameObjects).forEach(object => {
         object.update({
-          arrow: this.directionInput.direction
+          arrow: this.directionInput.direction,
+          map: this.map,
         });
-        object.sprite.draw(this.context);
+      });
+      
+      // Desenha os objetos
+      this.map.drawLowerImage(this.context, cameraPlayer);
+      Object.values(this.map.gameObjects).forEach(object => {
+        object.sprite.draw(this.context, cameraPlayer);
       })
-      this.map.drawUpperImage(this.context);
+      this.map.drawUpperImage(this.context, cameraPlayer);
+      
+      // Re-inicia o loop
       requestAnimationFrame(() => {
         step();
       })
@@ -27,8 +39,11 @@ class Map {
 
   init() {
     this.map = new OverWorldMap(window.OverWorldMaps.DemoRoom);
+    this.map.collisionObjects();
+    
     this.directionInput = new DirectionInput();
     this.directionInput.init();
+    
     this.startGamelLoop();
   };
 };

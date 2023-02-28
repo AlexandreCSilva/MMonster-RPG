@@ -7,6 +7,12 @@ class GameObject {
       gameObject: this,
       src: config.src || "./images/characters/people/npc2.png",
     });
+    this.hasCollision = false;
+  }
+
+  collision(map) {
+    this.hasCollision = true;
+    map.addWall(this.x, this.y);
   }
 
   update() {

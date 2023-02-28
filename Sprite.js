@@ -59,12 +59,11 @@ class Sprite {
     }
   }
 
-  draw(context) {
-    const x = this.gameObject.x - 8;
-    const y = this.gameObject.y - 18;
+  draw(context, cameraPlayer) {
+    const x = this.gameObject.x - 8 + utils.withGrid(14.5) - cameraPlayer.x;
+    const y = this.gameObject.y - 18 + utils.withGrid(8) - cameraPlayer.y;
 
     this.isShadowLoaded && context.drawImage(this.shadow, x, y);
-    
 
     const [frameX, frameY] = this.frame;
 
