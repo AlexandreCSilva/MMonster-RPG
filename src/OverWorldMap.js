@@ -61,8 +61,8 @@ window.OverWorldMaps = {
         y: 6,
       }),
       bald: new GameObject({
-        x: 7,
-        y: 9,
+        x: 10,
+        y: 8,
         src: "./images/characters/people/hero.png",
       }),
     },
