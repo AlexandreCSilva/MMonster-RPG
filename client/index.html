@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Online RPG</title>
+    <!-- <link href="/src/css/styles.css" type="text/css" rel="stylesheet">
+    <link href="/src/css/Menu.css" type="text/css" rel="stylesheet"> -->
+    <link href="./css/globalStyle.css" type="text/css" rel="stylesheet"> 
+  </head>
+  <body>
+    <div class="game-container">
+      <canvas class="game-canvas" width="480" height="260"></canvas>
+      <div class="chat-box">
+        <form class="form" action="">
+          <ul class="messages"></ul>
+          <input class="input" type="text" autocomplete="off" />
+        </form>
+      </div>
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="./index.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./DirectionInput.js"></script>
+    <script src="./LoadMap.js"></script>
+    <script src="./gameObjects/GameObject.js"></script>
+    <script src="./gameObjects/Person.js"></script>
+    <script src="./Sprite.js"></script>
+    <script src="./OverWorldMap.js"></script>
+    <script src="./Menu.js"></script>
+  </body>
+</html>
